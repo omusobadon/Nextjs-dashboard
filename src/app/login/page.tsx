@@ -112,4 +112,3 @@ function DogIcon(props) {
     />
   );
 }
->>>>>>> Stashed changes
