@@ -38,7 +38,7 @@ export default function Login() {
     if (shouldRedirect) {
       const timer = setTimeout(() => {
         router.push('/dashboard'); // リダイレクト先のURLに変更
-      }, 3000);
+      });
 
       return () => clearTimeout(timer);
     }
