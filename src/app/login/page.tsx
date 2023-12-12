@@ -31,22 +31,13 @@ export default function Login() {
 
     //prismaのログイン処理
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-      if (res.status === 400) {
-        alert("This email is not registered");
-      }
-      if (res.status === 200) {
+      const res = await signIn("credentials", {
+        redirect: true,
+        username: username,
+        password: password,
+      }).then((res) => {
         router.push("/dashboard");
-      }
+      });
     } catch (error) {
       console.log(error);
     }
