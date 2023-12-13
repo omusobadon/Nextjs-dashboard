@@ -24,7 +24,7 @@ export const authConfig = {
 
         const username = "admin";
 
-        return credentials.username === username && credentials.password === "admin"
+        return credentials.username === username && credentials.password === "admin123"
           ? { id: "userId", username }
           : null;
       },
