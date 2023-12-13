@@ -1,7 +1,7 @@
 # オムそば丼予約管理ダッシュボードです。
 
 ```
-Username: admin \
+Username: admin 
 password: admin123
 ```
 まだ未完成
