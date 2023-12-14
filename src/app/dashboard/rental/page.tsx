@@ -117,15 +117,15 @@ export default function Rental() {
             styles={selectedContent}
             buttonText="売上管理"
           >
-            <Link
-              href="/dashboard/rental?name=Earnings"
-              onClick={() => setSelectedContent("Earnings")}
-              className={getSelectedItemClass("Earnings")}
-            >
-              集計
-            </Link>
-            <li>稼働率</li>
-            <li>GoogleAnaltics</li>
+            <SideLink name="Earnings" sidebarHelpers={sidebarHelpers}>
+              売上
+            </SideLink>
+            <SideLink name="Operating" sidebarHelpers={sidebarHelpers}>
+              経費
+            </SideLink>
+            <SideLink name="GoogleAnaltics" sidebarHelpers={sidebarHelpers}>
+              Google Analtics
+            </SideLink>
           </LeftSidebar>
           <LeftSidebar
             contentName={["Toilet", "Progress", "Hmm"]}
