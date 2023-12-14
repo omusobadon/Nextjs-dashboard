@@ -57,7 +57,7 @@ export function Register() {
 }
 
 
-function DogIcon(props) {
+function DogIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
