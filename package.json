@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.7.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.294.0",
@@ -24,7 +26,11 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.4",
+<<<<<<< HEAD
     "@types/react": "^18.2.45",
+=======
+    "@types/react": "^18.2.43",
+>>>>>>> test
     "@types/react-dom": "^18.2.17",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.55.0",
