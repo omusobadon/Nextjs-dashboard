@@ -16,20 +16,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-<<<<<<< HEAD
+
 import { useFormState } from "react-dom";
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { authenticate } from "@/lib/actions";
 
 export default function Login() {
-  const [state, formAction] = useFormState(authenticate, undefined)
+  const [state, formAction] = useFormState(authenticate, undefined);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     // フォーム送信が成功したかどうかをチェック
-    if (state === 'success') {
+    if (state === "success") {
       setShouldRedirect(true);
     }
   }, [state]);
@@ -38,49 +38,19 @@ export default function Login() {
     // リダイレクトを実行
     if (shouldRedirect) {
       const timer = setTimeout(() => {
-        router.push('/dashboard'); // リダイレクト先のURLに変更
+        router.push("/dashboard"); // リダイレクト先のURLに変更
       });
 
       return () => clearTimeout(timer);
     }
   }, [shouldRedirect, router]);
 
-=======
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { Prisma } from "@prisma/client";
-
-export default function Login() {
-  const router = useRouter();
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) =>  {
-    event.preventDefault(); // デフォルトのフォーム送信を防ぐ
-
-    const formData = new FormData(event.currentTarget);
-    const username = formData.get("username");
-    const password = formData.get("password");
-
-    //prismaのログイン処理
-    try {
-      const res = await signIn("credentials", {
-        redirect: true,
-        username: username,
-        password: password,
-      }).then((res) => {
-        router.push("/dashboard");
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    
-  };
->>>>>>> test
   return (
     <Card
       key="1"
       className="mx-auto mt-10 w-96 bg-white shadow-lg rounded-lg overflow-hidden"
     >
       <CardHeader className="p-6 flex items-center space-x-4">
-<<<<<<< HEAD
         <DogIcon className="ml-4 w-16 h-16" />
         <div className="text-center">
           <CardTitle className="text-2xl font-semibold text-gray-700">
@@ -102,36 +72,10 @@ export default function Login() {
               type="text"
               placeholder="username"
               name="username"
-=======
-        <DogIcon className="w-8 h-8" />
-        <div className="text-center">
-          <CardTitle className="text-2xl font-semibold text-gray-700">
-            Login
-          </CardTitle>
-          <CardDescription className="text-gray-600 mt-2">
-            Please enter your email and password
-          </CardDescription>
-        </div>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="p-6 space-y-4">
-          <div className="space-y-2">
-            <Label className="text-gray-700" htmlFor="username">
-              Username
-            </Label>
-            <Input
-              className="border border-gray-300 rounded w-full p-2"
-              id="username"
-              name="username"
-              placeholder="m@example.com"
-              required
-              type="username"
->>>>>>> test
             />
           </div>
           <div className="space-y-2">
             <Label className="text-gray-700" htmlFor="password">
-<<<<<<< HEAD
               パスワード
             </Label>
             <Input
@@ -139,16 +83,6 @@ export default function Login() {
               type="password"
               placeholder="password"
               name="password"
-=======
-              Password
-            </Label>
-            <Input
-              className="border border-gray-300 rounded w-full p-2"
-              id="password"
-              name="password"
-              required
-              type="password"
->>>>>>> test
             />
           </div>
         </CardContent>
@@ -163,10 +97,8 @@ export default function Login() {
             Forgot Password?
           </Link>
         </CardFooter>
-<<<<<<< HEAD
+
         {state && state}
-=======
->>>>>>> test
       </form>
     </Card>
   );
@@ -181,8 +113,4 @@ function DogIcon(props) {
       {...props}
     />
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> test
