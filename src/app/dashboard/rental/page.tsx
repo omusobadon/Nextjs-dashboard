@@ -3,14 +3,37 @@
 import React, { useEffect, useRef, useState, ComponentType } from "react";
 import { Header } from "@/components/Haeder/Header";
 import { LeftSidebar } from "@/components/component/left-sidebar";
-import { Product, Earnings } from "@/components/RentalDisplay/RenderContent"; // 他のコンポーネントも同様にインポート
+import {
+  //商品管理
+  ProductPage,
+  StockPage,
+  //予約管理
+  ReservationPage,
+  ReservationCarPage,
+  ReservationMoviePage,
+  ResSchedule,
+  //売上管理
+  EarningsPage,
+  //Not Foundページ
+  NotFoundComponent,
+} from "@/components/RentalDisplay/RenderContent"; // 他のコンポーネントも同様にインポート
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SideLink } from "@/components/ui/Sidebar-Links";
 
 const CONTENT_COMPONENTS: { [key: string]: React.ComponentType } = {
-  Product: Product,
-  Earnings: Earnings,
+  //商品管理
+  ProductPage: ProductPage,
+  StockPage: StockPage,
+  //予約管理
+  ReservationPage: ReservationPage,
+  ReservationCarPage: ReservationCarPage,
+  ReservationMoviePage: ReservationMoviePage,
+  ResSchedule: ResSchedule,
+  //売上管理
+  EarningPage: EarningsPage,
+  //Not Foundページ
+  NotFoundComponent: NotFoundComponent,
   // Add other components here
 };
 
@@ -18,7 +41,7 @@ export default function Rental() {
   const searchParams = useSearchParams();
   const contentName = searchParams.get("name");
   const [selectedContent, setSelectedContent] = useState(
-    contentName || "Product"
+    contentName || "ProductPage"
   );
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -45,7 +68,8 @@ export default function Rental() {
 
   const renderContent = () => {
     const ContentComponent =
-      CONTENT_COMPONENTS[contentName] || CONTENT_COMPONENTS["Product"];
+      CONTENT_COMPONENTS[selectedContent] ||
+      CONTENT_COMPONENTS["NotFoundComponent"];
     return <ContentComponent />;
   };
 
@@ -61,11 +85,10 @@ export default function Rental() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [sidebarRef]);
-
   return (
-    <div className="">
+    <div>
       <Header isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <main className="flex h-screen ">
+      <main className="flex" style={{ height: "calc(100vh - 64px)" }}>
         <div
           ref={sidebarRef}
           className={`fixed inset-y-0 left-0 transform bg-[#2c3e50] text-white w-64 space-y-2 p-5 overflow-auto transition-transform duration-300 ease-in-out ${
@@ -84,66 +107,91 @@ export default function Rental() {
           </nav>
           <LeftSidebar
             styles={selectedContent}
-            contentName={["Product", "Stock", "Other"]}
+            contentName={["ProductPage", "StockPage", "OtherPage"]}
             buttonText="商品管理"
           >
-            <SideLink name="Product" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="ProductPage" sidebarHelpers={sidebarHelpers}>
               商品
             </SideLink>
-            <SideLink name="Stock" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="StockPage" sidebarHelpers={sidebarHelpers}>
               在庫
             </SideLink>
-            <SideLink name="Other" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="OtherPage" sidebarHelpers={sidebarHelpers}>
               その他
             </SideLink>
           </LeftSidebar>
           <LeftSidebar
-            contentName={["Reservation", "Cancel", "Cleaning"]}
+            contentName={[
+              "ReservationPage",
+              "ReservationCarPage",
+              "ReservationMoviePage",
+              "ResSchedule",
+              "CancelPage",
+              "CleaningPage",
+            ]}
             styles={selectedContent}
             buttonText="レンタル管理"
           >
-            <SideLink name="Reservation" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="ReservationPage" sidebarHelpers={sidebarHelpers}>
               予約
             </SideLink>
-            <SideLink name="Cancel" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="ReservationCarPage" sidebarHelpers={sidebarHelpers}>
+              予約(車ver.)
+            </SideLink>
+            <SideLink
+              name="ReservationMoviePage"
+              sidebarHelpers={sidebarHelpers}
+            >
+              予約(映画ver.)
+            </SideLink>
+            <SideLink name="ResSchedule" sidebarHelpers={sidebarHelpers}>
+              予約表
+            </SideLink>
+            <SideLink name="CancelPage" sidebarHelpers={sidebarHelpers}>
               キャンセル
             </SideLink>
-            <SideLink name="Cleaning" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="CleaningPage" sidebarHelpers={sidebarHelpers}>
               清掃
             </SideLink>
           </LeftSidebar>
           <LeftSidebar
-            contentName={["Earnings", "Operating", "GoogleAnaltics"]}
+            contentName={[
+              "EarningsPage",
+              "OperatingPage",
+              "GoogleAnalticsPage",
+            ]}
             styles={selectedContent}
             buttonText="売上管理"
           >
-            <SideLink name="Earnings" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="EarningsPage" sidebarHelpers={sidebarHelpers}>
               売上
             </SideLink>
-            <SideLink name="Operating" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="OperatingPage" sidebarHelpers={sidebarHelpers}>
               経費
             </SideLink>
-            <SideLink name="GoogleAnaltics" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="GoogleAnalticsPage" sidebarHelpers={sidebarHelpers}>
               Google Analtics
             </SideLink>
           </LeftSidebar>
           <LeftSidebar
-            contentName={["Toilet", "Progress", "Hmm"]}
+            contentName={["ToiletPage", "ProgressPage", "HmmPage"]}
             styles={selectedContent}
             buttonText="うんこ"
           >
-            <SideLink name="Toilet" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="ToiletPage" sidebarHelpers={sidebarHelpers}>
               トイレ
             </SideLink>
-            <SideLink name="Progress" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="ProgressPage" sidebarHelpers={sidebarHelpers}>
               進捗
             </SideLink>
-            <SideLink name="Hmm" sidebarHelpers={sidebarHelpers}>
+            <SideLink name="HmmPage" sidebarHelpers={sidebarHelpers}>
               うーん
             </SideLink>
           </LeftSidebar>
         </div>
-        <div className="flex-grow">{renderContent()}</div>
+        <div className="flex-grow" style={{ overflowY: "auto" }}>
+          {renderContent()}
+        </div>
       </main>
     </div>
   );

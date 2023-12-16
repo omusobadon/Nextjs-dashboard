@@ -12,8 +12,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { ImageLoader } from "next/image";
 import { useRouter } from "next/navigation";
+import { StaticImport, PlaceholderValue, OnLoadingComplete } from "next/dist/shared/lib/get-img-props";
 
 export default function Register() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // フォーム送信時の処理
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
 
     // パスワードの一致確認
@@ -133,7 +134,7 @@ export default function Register() {
   );
 }
 
-function DogIcon(props) {
+function DogIcon(props: any) {
   return (
     <Image
       src="/オムそば丼キャラ切り抜き.png"

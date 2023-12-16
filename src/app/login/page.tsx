@@ -104,7 +104,7 @@ export default function Login() {
   );
 }
 
-function DogIcon(props) {
+function DogIcon(props: any) {
   return (
     <Image
       src="/オムそば丼キャラ切り抜き.png"
