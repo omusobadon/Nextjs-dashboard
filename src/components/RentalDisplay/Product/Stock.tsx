@@ -27,35 +27,23 @@ export default function StockPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="max-w-[150px] text-xs md:text-sm lg:text-base">
-                Product ID
-              </TableHead>
-              
-              <TableHead className="text-xs md:text-sm lg:text-base">
-                商品名
-              </TableHead>
-              <TableHead className="text-xs md:text-sm lg:text-base">
-                個数
-              </TableHead>
-              <TableHead className="text-xs md:text-sm lg:text-base" />
+              <TableHead className="w-[50px]" />
+              <TableHead>商品名</TableHead>
+              <TableHead>カテゴリー</TableHead>
+              <TableHead>在庫数</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
-
             {!isLoading &&
               !error &&
-              products.map((products) => (
-                // eslint-disable-next-line react/jsx-key
-                <TableRow>
-                  <TableCell key={products.id}>{products.id}</TableCell>
-                  <TableCell>{products.name}</TableCell>
-                  <TableCell>{products.num}</TableCell>
-                  <TableCell>
-                    <button className="px-2 py-1 text-xs rounded-md bg-blue-500 text-white focus:outline-none md:text-sm lg:text-base">
-                      Edit
-                    </button>
-                  </TableCell>
+              products.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell>{product.id}</TableCell>
+                  <TableCell>{product.category}</TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{product.num}</TableCell>
                 </TableRow>
               ))}
           </TableBody>

@@ -1,74 +1,55 @@
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-} from "@/components/ui/table";
+import SelectionArea, { SelectionEvent } from "@viselect/react";
+import React, { useState } from "react";
+import "./style.css";
 
-export default function Schedule() {
+export default function Scheduler() {
+  const [selected, setSelected] = useState<Set<number>>(() => new Set());
+
+  // 時間間隔を設定（例: 10分間隔）
+  const intervalMinutes = 30; // ここを変更して間隔を調整（10, 20, 30など）
+  const partsPerHour = 60 / intervalMinutes;
+  const totalParts = 24 * partsPerHour;
+
+  const extractIds = (els: Element[]): number[] =>
+    els
+      .map((v) => v.getAttribute("data-key"))
+      .filter(Boolean)
+      .map(Number);
+
+  const onStart = ({ event, selection }: SelectionEvent) => {
+    if (!event?.ctrlKey && !event?.metaKey) {
+      selection.clearSelection();
+      setSelected(() => new Set());
+    }
+  };
+
+  const onMove = ({
+    store: {
+      changed: { added, removed }
+    }
+  }: SelectionEvent) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      extractIds(added).forEach((id) => next.add(id));
+      extractIds(removed).forEach((id) => next.delete(id));
+      return next;
+    });
+  };
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="">商品名</TableHead>
-          <TableHead>0時</TableHead>
-          <TableHead>1時</TableHead>
-          <TableHead>2時</TableHead>
-          <TableHead>3時</TableHead>
-          <TableHead>4時</TableHead>
-          <TableHead>5時</TableHead>
-          <TableHead>6時</TableHead>
-          <TableHead>7時</TableHead>
-          <TableHead>8時</TableHead>
-          <TableHead>9時</TableHead>
-          <TableHead>10時</TableHead>
-          <TableHead>11時</TableHead>
-          <TableHead>12時</TableHead>
-          <TableHead>13時</TableHead>
-          <TableHead>14時</TableHead>
-          <TableHead>15時</TableHead>
-          <TableHead>16時</TableHead>
-          <TableHead>17時</TableHead>
-          <TableHead>18時</TableHead>
-          <TableHead>19時</TableHead>
-          <TableHead>20時</TableHead>
-          <TableHead>21時</TableHead>
-          <TableHead>22時</TableHead>
-          <TableHead>23時</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell>商品1</TableCell>
-          <TableCell colSpan={24} />
-        </TableRow>
-        <TableRow>
-          <TableCell>商品2</TableCell>
-          <TableCell colSpan={24} />
-        </TableRow>
-        <TableRow>
-          <TableCell>商品3</TableCell>
-          <TableCell colSpan={24} />
-        </TableRow>
-        <TableRow>
-          <TableCell>商品4</TableCell>
-          <TableCell colSpan={24} />
-        </TableRow>
-        <TableRow>
-          <TableCell>商品5</TableCell>
-          <TableCell colSpan={24} />
-        </TableRow>
-        <TableRow>
-          <TableCell>商品6</TableCell>
-          <TableCell colSpan={24} />
-        </TableRow>
-        <TableRow>
-          <TableCell>商品7</TableCell>
-          <TableCell colSpan={24} />
-        </TableRow>
-      </TableBody>
-    </Table>
+    <SelectionArea
+      className="schedules"
+      onStart={onStart}
+      onMove={onMove}
+      selectables=".selectable"
+    >
+      {new Array(totalParts).fill(0).map((_, index) => (
+        <div
+          className={selected.has(index) ? "selected selectable" : "selectable"}
+          data-key={index}
+          key={index}
+        />
+      ))}
+    </SelectionArea>
   );
 }

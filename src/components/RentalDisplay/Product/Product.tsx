@@ -9,7 +9,7 @@ import {
   Table,
 } from "@/components/ui/table";
 import "@/lib/api-actions";
-import FetchLoading  from "@/components/component/FetchLoading";
+import FetchLoading from "@/components/component/FetchLoading";
 import { useFetchAPI } from "@/lib/api-actions";
 
 export default function ProductPage() {
@@ -57,12 +57,8 @@ export default function ProductPage() {
           </TableRow>
         </TableHeader>
 
-        <FetchLoading
-          isLoading={isLoading}
-          error={error}
-          colSpan={6}
-        />
         <TableBody>
+          <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
           {!isLoading &&
             !error &&
             products.map((product) => (
