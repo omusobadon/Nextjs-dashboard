@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import SeatButton from "./SeatButton";
+import React, { useState } from "react";
+import SeatingSection from "@/components/component/Chinema/SeatingSection"; // SeatingSectionのインポートを確認してください
+import seatMapData from './seatMapData.json';
 
-export default function Seat() {
-  const [seats, setSeats] = useState([]);
+export default function Home( { breakpoint, mapsnumber }) {
+  const customSeatMap = [];
 
-  useEffect(() => {
-    const fetchSeats = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/Seat");
-        setSeats(response.data.seats);
-      } catch (error) {
-        console.error("Error fetching seats:", error);
-      }
-    };
+  const [seatMaps, setSeatMaps] = useState(seatMapData);
 
-    fetchSeats();
-  }, []);
 
-  // 行ごとに座席をグループ化する
-  const groupedSeats = seats.reduce((acc, seat) => {
-    acc[seat.row] = acc[seat.row] || [];
-    acc[seat.row].push(seat);
-    return acc;
-  }, {});
+  const [productId, setProductId] = useState("1"); // 選択されている product_id
+  const [mode, setMode] = useState(mapsnumber); // 選択されているモード（教室か映画館か）
+
+  // product_idが変更されたときのハンドラ
+  const handleProductChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setProductId(event.target.value);
+  };
+
+  // モードが変更されたときのハンドラ
+  const handleModeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setMode(event.target.value);
+  };
 
   return (
     <div>
-      {Object.keys(groupedSeats).map(row => (
-        <div key={row} className="flex items-center mb-2">
-          <div className="mr-2">{row}</div>
-          {groupedSeats[row].map(seat => (
-            <SeatButton
-              key={seat.id}
-              seat={seat}
-              toggleReservation={() => console.log("Toggle reservation", seat.id)}
-            />
-          ))}
-        </div>
-      ))}
+      <h1>座席予約</h1>
+      <select
+        name="product_id"
+        id="product_id"
+        onChange={handleProductChange}
+        value={productId}
+      >
+        <option value="1">product_id1</option>
+        <option value="2">product_id2</option>
+        <option value="3">product_id3</option>
+      </select>
+      <SeatingSection
+        productId={productId}
+        seatMap={seatMaps[mode as keyof typeof seatMaps]}
+        breakpoint={breakpoint}
+      />
     </div>
   );
 }

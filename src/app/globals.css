@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.seating-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .seat-row {
+    display: flex;
+  }
+  
+  .seat {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+  }
+  
+  .row-label, .column-label {
+    font-weight: bold;
+  }
+  
+  .label-placeholder {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+  }
+  
+  .available {
+    background-color: #bada55; /* 利用可能な座席の色 */
+  }
+  
+  .reserved {
+    background-color: #ff6961; /* 予約済みの座席の色 */
+  }
+  
+  .disabled {
+    background-color: #f0f0f0; /* 予約不可の座席の色 */
+  }
+  
+  .seat.table {
+    background-color: #ccc; /* テーブルの背景色 */
+    /* その他のテーブルのスタイル */
+  }
+  
+  .seat.label {
+    min-width: 100px; /* または別の適切な値 */
+  }

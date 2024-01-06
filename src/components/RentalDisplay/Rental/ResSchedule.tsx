@@ -59,8 +59,9 @@ export default function ResSchedule() {
           </TableRow>
         </TableBody>
       </Table>
+      <div></div>
     </div>
   );
 }
 
-//<Scheduler />
+

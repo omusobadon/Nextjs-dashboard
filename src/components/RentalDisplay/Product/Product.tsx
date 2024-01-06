@@ -47,6 +47,7 @@ export default function ProductPage() {
           <Input className="w-full sm:w-auto" placeholder="検索" />
         </div>
       </div>
+      <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -58,7 +59,6 @@ export default function ProductPage() {
         </TableHeader>
 
         <TableBody>
-          <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
           {!isLoading &&
             !error &&
             products.map((product) => (

@@ -10,7 +10,7 @@ export default function ReservationMoviePage() {
         <div>選択不可</div>
       </div>
       <div>
-        <Seat breakpoint={17} mapsnumber={"2"} />
+        <Seat breakpoint={8} mapsnumber={"1"} />
       </div>
     </div>
   );

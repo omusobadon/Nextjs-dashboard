@@ -23,6 +23,7 @@ export default function StockPage() {
           在庫
         </h1>
       </div>
+      <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
       <div className="border shadow-sm rounded-lg overflow-x-auto">
         <Table>
           <TableHeader>
@@ -35,7 +36,6 @@ export default function StockPage() {
           </TableHeader>
 
           <TableBody>
-            <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
             {!isLoading &&
               !error &&
               products.map((product) => (
