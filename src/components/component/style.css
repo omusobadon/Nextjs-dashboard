@@ -1,0 +1,23 @@
+.schedules {
+  width: 120vmin;
+  display: grid;
+  grid-template-columns: repeat(48, 1fr);
+  height: 10vmin;
+
+  border-radius: 0.5rem;
+  user-select: none;
+}
+
+.schedules > div {
+  background: #fbfbfb;
+  border: 1px solid #5f9efc;
+}
+
+.schedules > div.selected {
+  background: #5f9efc;
+}
+
+.selection-area {
+  background: #4f90f22d;
+  border: 1px solid #4f90f2;
+}

@@ -1,0 +1,221 @@
+{
+  "screen": "Screen 1",
+  "seats": [
+    {
+      "id": "A1",
+      "row": "A",
+      "column": 1,
+      "reserved": false
+    },
+    {
+      "id": "A2",
+      "row": "A",
+      "column": 2,
+      "reserved": false
+    },
+    {
+      "id": "A3",
+      "row": "A",
+      "column": 3,
+      "reserved": false
+    },
+    {
+      "id": "A4",
+      "row": "A",
+      "column": 4,
+      "reserved": false
+    },
+    {
+      "id": "A5",
+      "row": "A",
+      "column": 5,
+      "reserved": false
+    },
+    {
+      "id": "A6",
+      "row": "A",
+      "column": 6,
+      "reserved": false
+    },
+    {
+      "id": "B1",
+      "row": "B",
+      "column": 1,
+      "reserved": false
+    },
+    {
+      "id": "B2",
+      "row": "B",
+      "column": 2,
+      "reserved": false
+    },
+    {
+      "id": "B3",
+      "row": "B",
+      "column": 3,
+      "reserved": false
+    },
+    {
+      "id": "B4",
+      "row": "B",
+      "column": 4,
+      "reserved": false
+    },
+    {
+      "id": "B5",
+      "row": "B",
+      "column": 5,
+      "reserved": false
+    },
+    {
+      "id": "B6",
+      "row": "B",
+      "column": 6,
+      "reserved": false
+    },
+    {
+      "id": "C1",
+      "row": "C",
+      "column": 1,
+      "reserved": false
+    },
+    {
+      "id": "C2",
+      "row": "C",
+      "column": 2,
+      "reserved": false
+    },
+    {
+      "id": "C3",
+      "row": "C",
+      "column": 3,
+      "reserved": false
+    },
+    {
+      "id": "C4",
+      "row": "C",
+      "column": 4,
+      "reserved": false
+    },
+    {
+      "id": "C5",
+      "row": "C",
+      "column": 5,
+      "reserved": false
+    },
+    {
+      "id": "C6",
+      "row": "C",
+      "column": 6,
+      "reserved": false
+    },
+    {
+      "id": "D1",
+      "row": "D",
+      "column": 1,
+      "reserved": false
+    },
+    {
+      "id": "D2",
+      "row": "D",
+      "column": 2,
+      "reserved": false
+    },
+    {
+      "id": "D3",
+      "row": "D",
+      "column": 3,
+      "reserved": false
+    },
+    {
+      "id": "D4",
+      "row": "D",
+      "column": 4,
+      "reserved": false
+    },
+    {
+      "id": "D5",
+      "row": "D",
+      "column": 5,
+      "reserved": false
+    },
+    {
+      "id": "D6",
+      "row": "D",
+      "column": 6,
+      "reserved": false
+    },
+    {
+      "id": "E1",
+      "row": "E",
+      "column": 1,
+      "reserved": false
+    },
+    {
+      "id": "E2",
+      "row": "E",
+      "column": 2,
+      "reserved": false
+    },
+    {
+      "id": "E3",
+      "row": "E",
+      "column": 3,
+      "reserved": false
+    },
+    {
+      "id": "E4",
+      "row": "E",
+      "column": 4,
+      "reserved": false
+    },
+    {
+      "id": "E5",
+      "row": "E",
+      "column": 5,
+      "reserved": false
+    },
+    {
+      "id": "E6",
+      "row": "E",
+      "column": 6,
+      "reserved": false
+    },
+    {
+      "id": "F1",
+      "row": "F",
+      "column": 1,
+      "reserved": false
+    },
+    {
+      "id": "F2",
+      "row": "F",
+      "column": 2,
+      "reserved": false
+    },
+    {
+      "id": "F3",
+      "row": "F",
+      "column": 3,
+      "reserved": false
+    },
+    {
+      "id": "F4",
+      "row": "F",
+      "column": 4,
+      "reserved": false
+    },
+    {
+      "id": "F5",
+      "row": "F",
+      "column": 5,
+      "reserved": false
+    },
+    {
+      "id": "F6",
+      "row": "F",
+      "column": 6,
+      "reserved": false
+    }
+  ]
+}
