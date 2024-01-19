@@ -15,7 +15,7 @@ export default function SeatingSection({ productId, seatMap, breakpoint } : Seat
     const fetchSeats = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/get_seat?product_id=${productId}`
+          `http://${process.env.NEXT_PUBLIC_GOAPI_IP}:8080/get_seat?product_id=${productId}`
         );
         setSeats(response.data.seat);
       } catch (error) {

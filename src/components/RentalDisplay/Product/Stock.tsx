@@ -10,11 +10,11 @@ import {
   TableBody,
   Table,
 } from "@/components/ui/table";
-import { useFetchAPI } from "@/lib/api-actions";
+
 import FetchLoading from "@/components/component/FetchLoading";
 
 export default function StockPage() {
-  const { products, isLoading, error } = useFetchAPI();
+
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6 lg:p-8 xl:gap-10">
@@ -23,7 +23,7 @@ export default function StockPage() {
           在庫
         </h1>
       </div>
-      <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
+
       <div className="border shadow-sm rounded-lg overflow-x-auto">
         <Table>
           <TableHeader>
@@ -36,7 +36,7 @@ export default function StockPage() {
           </TableHeader>
 
           <TableBody>
-            {!isLoading &&
+            {/*!isLoading &&
               !error &&
               products.map((product) => (
                 <TableRow key={product.id}>
@@ -45,7 +45,7 @@ export default function StockPage() {
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.num}</TableCell>
                 </TableRow>
-              ))}
+              ))*/}
           </TableBody>
         </Table>
       </div>

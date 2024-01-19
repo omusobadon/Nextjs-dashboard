@@ -8,13 +8,30 @@ import {
   TableBody,
   Table,
 } from "@/components/ui/table";
-import "@/lib/api-actions";
-import FetchLoading from "@/components/component/FetchLoading";
-import { useFetchAPI } from "@/lib/api-actions";
+import React, { useState, useEffect } from "react";
+import { getManageData } from "@/lib/api_get";
 
 export default function ProductPage() {
-  const { products, isLoading, error } = useFetchAPI();
+  const [products, setProducts] = useState([]);
 
+  const [selectedShopId, setSelectedShopId] = useState(1); // 初期値を設定
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getManageData(selectedShopId); // 選択されたショップIDを使用
+        console.log(response); // レスポンスを確認
+        if (response && response.groups) {
+          const allProducts = response.groups.flatMap((group: { product: any; }) => group.product);
+          setProducts(allProducts);
+        }
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, [selectedShopId]); // selectedS
   return (
     <div className="bg-white p-4 sm:p-6 ">
       <div className="flex flex-col sm:flex-row justify-between mb-4">
@@ -47,7 +64,7 @@ export default function ProductPage() {
           <Input className="w-full sm:w-auto" placeholder="検索" />
         </div>
       </div>
-      <FetchLoading isLoading={isLoading} error={error} colSpan={6} />
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -59,16 +76,18 @@ export default function ProductPage() {
         </TableHeader>
 
         <TableBody>
-          {!isLoading &&
-            !error &&
-            products.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell>{product.id}</TableCell>
-                <TableCell>{product.category}</TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.value}</TableCell>
-              </TableRow>
-            ))}
+          {products.map((product, index) => (
+            <TableRow key={index}>
+              <TableCell>{/* 画像やアイコンなど */}</TableCell>
+              <TableCell>{product.name}</TableCell>
+              <TableCell>{/* カテゴリー情報 */}</TableCell>
+              <TableCell>
+                {product.price.map((price) => (
+                  <div key={price.id}>{price.value}</div>
+                ))}
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

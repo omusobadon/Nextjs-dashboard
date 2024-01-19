@@ -3,7 +3,19 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getShops } from "@/lib/api_get"; // api_get.tsからgetShops関数をインポート
+import { ShopProps } from "@/lib/TableInterface";
+import { useFetchData } from "@/lib/useFetchData";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function Header({
   isSidebarOpen,
@@ -22,6 +34,21 @@ export function Header({
     }
   };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [shops, setShops] = useState<ShopProps[]>([]);
+  const { fetchData, isLoading } = useFetchData<ShopProps[]>(
+    getShops,
+    setShops
+  );
+  const [selectedShopId, setSelectedShopId] = useState(null);
+
+  const handleSelectShop = (event: { target: { value: React.SetStateAction<null>; }; }) => {
+    setSelectedShopId(event.target.value);
+  };
+  
+
+  useEffect(() => {
+    fetchData(); // ショップデータを取得
+  }, [fetchData]);
 
   return (
     <header className="flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6">
@@ -75,6 +102,24 @@ export function Header({
         </Link>
       </nav>
       <div className="flex items-center  gap-4 md:ml-auto md:gap-2 lg:gap-4">
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a shop" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Shops</SelectLabel>
+              {!isLoading &&
+                shops.map((shop) => (
+                  <SelectItem key={shop.id} value={shop.id.toString()}>
+                    {shop.name}
+                  </SelectItem>
+                ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
         <form className="flex-1 left-0 z-0">
           <div className="relative">
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
