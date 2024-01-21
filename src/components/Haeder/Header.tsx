@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import React, { useState, useEffect } from "react";
-import { getShops } from "@/lib/api_get"; // api_get.tsからgetShops関数をインポート
 import { ShopProps } from "@/lib/TableInterface";
 import { useFetchData } from "@/lib/useFetchData";
 import {
@@ -16,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import GetAPI from "@/lib/api_get";
 
 export function Header({
   isSidebarOpen,
@@ -33,23 +33,65 @@ export function Header({
       setIsMenuOpen(!isMenuOpen);
     }
   };
+
+  const [selectedShopDetails, setSelectedShopDetails] =
+    useState<ShopProps | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [shops, setShops] = useState<ShopProps[]>([]);
-  const { fetchData, isLoading } = useFetchData<ShopProps[]>(
-    getShops,
-    setShops
-  );
-  const [selectedShopId, setSelectedShopId] = useState(null);
-
-  const handleSelectShop = (event: { target: { value: React.SetStateAction<null>; }; }) => {
-    setSelectedShopId(event.target.value);
-  };
-  
+  const [selectedShop, setSelectedShop] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("selectedShopId") || "1";
+    }
+    return "1";
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchData(); // ショップデータを取得
-  }, [fetchData]);
+    const shop = shops.find((s) => s.id.toString() === selectedShop);
+    setSelectedShopDetails(shop || null);
+  }, [selectedShop, shops]);
 
+  useEffect(() => {
+    // localStorageから選択された店舗IDを取得
+    const storedSelectedShop = localStorage.getItem("selectedShopId");
+    if (storedSelectedShop) {
+      setSelectedShop(storedSelectedShop);
+    }
+  }, []);
+
+  // 選択された店舗IDが変更されたときにローカルストレージを更新する
+  useEffect(() => {
+    // ローカルストレージに保存されている値を取得
+    const storedShopId = localStorage.getItem("selectedShopId");
+
+    if (selectedShop && selectedShop !== storedShopId) {
+      // ローカルストレージに新しい値を保存
+      localStorage.setItem("selectedShopId", selectedShop);
+      // ページをリロード
+      window.location.reload();
+    }
+  }, [selectedShop]);
+
+  const handleSelectShop = (shopId: string) => {
+    setSelectedShop(shopId);
+  };
+
+  useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        setIsLoading(true);
+        const getApi = new GetAPI(); // ShopAPIのインスタンスを作成
+        const fetchedShops = await getApi.getShops(); // getShopsメソッドを呼び出し
+        setShops(fetchedShops);
+      } catch (error) {
+        console.error("Error fetching shops:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchShops();
+  }, []);
   return (
     <header className="flex items-center justify-between h-16 px-4 border-b shrink-0 md:px-6">
       <Button
@@ -101,35 +143,31 @@ export function Header({
           顧客
         </Link>
       </nav>
-      <div className="flex items-center  gap-4 md:ml-auto md:gap-2 lg:gap-4">
-        <Select>
+      <div className="flex md:ml-auto md:gap-2 lg:gap-4">
+        <Select
+          value={selectedShop} // Select コンポーネントに現在の選択値を渡す
+          onValueChange={(shopId) => setSelectedShop(shopId)}
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select a shop" />
           </SelectTrigger>
 
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Shops</SelectLabel>
-              {!isLoading &&
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : (
                 shops.map((shop) => (
                   <SelectItem key={shop.id} value={shop.id.toString()}>
                     {shop.name}
                   </SelectItem>
-                ))}
+                ))
+              )}
             </SelectGroup>
           </SelectContent>
+          
         </Select>
 
-        <form className="flex-1 left-0 z-0">
-          <div className="relative">
-            <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
-            <Input
-              className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              placeholder="Search rentals..."
-              type="search"
-            />
-          </div>
-        </form>
         <Button className="rounded-full" size="icon" variant="ghost">
           <Image
             src="/オムそば丼キャラ切り抜き.png"

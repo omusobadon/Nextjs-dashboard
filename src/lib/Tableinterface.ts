@@ -9,9 +9,9 @@ export interface ProductGroupProps {
   id: number;
   shop_id: number;
   name: string;
-  start_before: string;
+  start_before: number;
   invalid_duration: number;
-  unit_time: string;
+  unit_time: number;
   max_time: number;
   interval: number;
 }

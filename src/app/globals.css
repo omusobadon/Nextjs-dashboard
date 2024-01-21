@@ -52,3 +52,19 @@
   .seat.label {
     min-width: 100px; /* または別の適切な値 */
   }
+
+
+  .arrow {
+    display: inline-block;
+    margin-left: 10px;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    padding: 3px;
+    transform: rotate(-45deg);
+    /* 上向き矢印 */
+  }
+  
+  .arrow.isOpen {
+    transform: rotate(45deg);
+    /* 下向き矢印 */
+  }

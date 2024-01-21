@@ -45,7 +45,7 @@ export default function Rental() {
   const [selectedContent, setSelectedContent] = useState(
     contentName || "ProductPage"
   );
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const toggleSidebar = () => {
@@ -180,21 +180,6 @@ export default function Rental() {
             </SideLink>
             <SideLink name="GoogleAnalticsPage" sidebarHelpers={sidebarHelpers}>
               Google Analtics
-            </SideLink>
-          </LeftSidebar>
-          <LeftSidebar
-            contentName={["ToiletPage", "ProgressPage", "HmmPage"]}
-            styles={selectedContent}
-            buttonText="うんこ"
-          >
-            <SideLink name="ToiletPage" sidebarHelpers={sidebarHelpers}>
-              トイレ
-            </SideLink>
-            <SideLink name="ProgressPage" sidebarHelpers={sidebarHelpers}>
-              進捗
-            </SideLink>
-            <SideLink name="HmmPage" sidebarHelpers={sidebarHelpers}>
-              うーん
             </SideLink>
           </LeftSidebar>
         </div>

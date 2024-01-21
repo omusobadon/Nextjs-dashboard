@@ -9,20 +9,42 @@ import {
   Table,
 } from "@/components/ui/table";
 import React, { useState, useEffect } from "react";
-import { getManageData } from "@/lib/api_get";
+//API
+import GetAPI from "@/lib/api_get";
+import DeleteAPI from "@/lib/api_delete";
+//SubComponents
+import { CreateProduct } from "Rental/Product/SubComponents/createproduct.tsx";
+import { CreateGroup } from "Rental/Product/SubComponents/CreateGroup.tsx";
+import { DeleteGroups } from "Rental/Product/SubComponents/DeleteGroup.tsx";
+import { DeleteProduct } from "Rental/Product/SubComponents/DeleteProduct.tsx";
 
 export default function ProductPage() {
-  const [products, setProducts] = useState([]);
+  const [groups, setProducts] = useState([]);
+  const [openGroups, setOpenGroups] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const [selectedShopId, setSelectedShopId] = useState(1); // 初期値を設定
+  const handleCheckboxChange = (productId, isChecked) => {
+    setSelectedProducts((prevSelectedProducts) => {
+      if (isChecked) {
+        return [...prevSelectedProducts, productId];
+      } else {
+        return prevSelectedProducts.filter((id) => id !== productId);
+      }
+    });
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getManageData(selectedShopId); // 選択されたショップIDを使用
-        console.log(response); // レスポンスを確認
-        if (response && response.groups) {
-          const allProducts = response.groups.flatMap((group: { product: any; }) => group.product);
+        const shopApi = new GetAPI();
+        const selectedShopId = Number(localStorage.getItem("selectedShopId"));
+
+        const manageData = await shopApi.getManageData(selectedShopId);
+        console.log("Manage Data:", manageData);
+
+        if (manageData && manageData.groups) {
+          const allProducts = manageData.groups.flatMap((group) => group);
           setProducts(allProducts);
         }
       } catch (error) {
@@ -31,7 +53,14 @@ export default function ProductPage() {
     };
 
     fetchProducts();
-  }, [selectedShopId]); // selectedS
+  }, []);
+
+  const toggleGroup = (groupId) => {
+    setOpenGroups((prevOpenGroups) => ({
+      ...prevOpenGroups,
+      [groupId]: !prevOpenGroups[groupId],
+    }));
+  };
   return (
     <div className="bg-white p-4 sm:p-6 ">
       <div className="flex flex-col sm:flex-row justify-between mb-4">
@@ -50,46 +79,109 @@ export default function ProductPage() {
             <div className="text-lg font-semibold">¥ 0 C-grade</div>
           </div>
         </div>
-        <Button className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white">
-          商品を登録する
-        </Button>
+        <div className="flex gap-5">
+          <CreateGroup groups={groups} />
+          <CreateProduct groups={groups} />
+        </div>
       </div>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
         <div className="flex space-x-2 mb-2 sm:mb-0">
           <Button variant="secondary">すべて</Button>
           <Button variant="secondary">アクティブ</Button>
           <Button variant="secondary">アーカイブ済み</Button>
+          {selectedProducts.length > 0 && (
+            <div className="delete-button">
+              <DeleteProduct selectedProducts={selectedProducts} />
+            </div>
+          )}
         </div>
         <div className="flex space-x-2">
           <Input className="w-full sm:w-auto" placeholder="検索" />
         </div>
       </div>
+      {groups.map((group) => (
+        <div
+          key={group.id}
+          className="flex flex-col w-full h-full rounded-lg overflow-hidden my-10  dark:bg-gray-800 shadow-lg"
+        >
+          <Button
+            onClick={() => toggleGroup(group.id)}
+            className="flex justify-start h-10 p-10 gap-10 bg-stone-100 hover:bg-gray-300 border-b"
+          >
+            <span
+              className={`arrow ${openGroups[group.id] ? "isOpen" : ""}`}
+            ></span>
+            {group.product &&
+              group.product.length > 0 &&
+              group.product[0].img_data && (
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src={`data:image/jpeg;base64,${group.product[0].img_data}`}
+                  alt="Group Image"
+                />
+              )}
+            {group.name}
+          </Button>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]" />
-            <TableHead>商品名</TableHead>
-            <TableHead>カテゴリー</TableHead>
-            <TableHead>値段</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {products.map((product, index) => (
-            <TableRow key={index}>
-              <TableCell>{/* 画像やアイコンなど */}</TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell>{/* カテゴリー情報 */}</TableCell>
-              <TableCell>
-                {product.price.map((price) => (
-                  <div key={price.id}>{price.value}</div>
-                ))}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          {openGroups[group.id] && (
+            <div className="p-4">
+              <div className=" flex gap-4">
+                <Button
+                  className="mb-4 bg-blue-600 text-white"
+                  variant="outline"
+                >
+                  グループを編集
+                </Button>
+                <div className="delete-button">
+                  <DeleteGroups groups={group} />
+                </div>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[50px]" />
+                    <TableHead>名前</TableHead>
+                    <TableHead>在庫数</TableHead>
+                    <TableHead>値段</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {group.product &&
+                    Array.isArray(group.product) &&
+                    group.product.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell className="w-[50px]">
+                          <input
+                            type="checkbox"
+                            checked={selectedProducts.includes(product.id)}
+                            onChange={(e) =>
+                              handleCheckboxChange(product.id, e.target.checked)
+                            }
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <img
+                            className="w-10 h-10 rounded-full"
+                            src={`data:image/jpeg;base64,${product.img_data}`}
+                            alt="img"
+                          />
+                          {product.name}
+                        </TableCell>
+                        <TableCell>{product.qty}</TableCell>
+                        <TableCell>
+                          {Array.isArray(product.price) &&
+                          product.price.length > 0
+                            ? `${product.price[0].value}円`
+                            : "N/A"}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

@@ -36,16 +36,7 @@ export default function StockPage() {
           </TableHeader>
 
           <TableBody>
-            {/*!isLoading &&
-              !error &&
-              products.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell>{product.id}</TableCell>
-                  <TableCell>{product.category}</TableCell>
-                  <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.num}</TableCell>
-                </TableRow>
-              ))*/}
+            
           </TableBody>
         </Table>
       </div>
