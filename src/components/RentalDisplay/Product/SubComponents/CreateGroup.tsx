@@ -23,8 +23,23 @@ import {
 import React, { useState, useEffect } from "react";
 import GetAPI from "@/lib/api_get";
 import PutAPI from "@/lib/api_put";
+import { GroupProps } from "@/lib/TableInterface";
 
-export function CreateGroup({ groups }) {
+type CreateGroupProps = {
+  groups: GroupProps[]; // ここで正しい型を指定
+};
+
+type FormData = {
+  name: string;
+  shop_id: number | null; // ここで型を number | null に設定
+  start_before: string;
+  invalid_duration: string;
+  unit_time: string;
+  max_time: string;
+  interval: string;
+};
+
+export function CreateGroup({ groups }: CreateGroupProps) {
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedTime, setSelectedTime] = React.useState(null);
   const [selectedShopName, setSelectedShopName] = useState(""); // この行を追加
@@ -56,11 +71,11 @@ export function CreateGroup({ groups }) {
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      shop_id: selectedShopId ? parseInt(selectedShopId, 10) : null, // selectedShopId を整数に変換
+      shop_id: selectedShopId ? parseInt(selectedShopId, 10) : null,
     }));
   }, [selectedShopId]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const { id, value } = e.target;
 
     // 数値フィールドの処理
@@ -86,9 +101,9 @@ export function CreateGroup({ groups }) {
     }));
   };
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
-    shop_id: "",
+    shop_id: null, // 初期値を null に設定
     start_before: "",
     invalid_duration: "",
     unit_time: "",
@@ -96,7 +111,7 @@ export function CreateGroup({ groups }) {
     interval: "",
   });
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // 空文字列を持つフィールドを除外
@@ -120,7 +135,7 @@ export function CreateGroup({ groups }) {
     // フォームのデータをリセットする
     setFormData({
       name: "",
-      shop_id: "",
+      shop_id: null,
       start_before: "",
       invalid_duration: "",
       unit_time: "",
@@ -199,7 +214,7 @@ export function CreateGroup({ groups }) {
               name="unit_time" // この行を追加
               id="unit_time"
               type="number"
-              text="分"
+            
               min="0"
               value={formData.unit_time}
               onChange={handleInputChange}
@@ -211,7 +226,7 @@ export function CreateGroup({ groups }) {
               name="max_time" // この行を追加
               id="max_time"
               type="number"
-              text="時"
+
               min="0"
               value={formData.max_time}
               onChange={handleInputChange}

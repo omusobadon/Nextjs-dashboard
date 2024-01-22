@@ -1,19 +1,8 @@
 export interface ShopProps {
-  id : number;
-  name : string;
-  phone : string;
-  address : string;
-}
-
-export interface ProductGroupProps {
   id: number;
-  shop_id: number;
   name: string;
-  start_before: number;
-  invalid_duration: number;
-  unit_time: number;
-  max_time: number;
-  interval: number;
+  phone: string;
+  address: string;
 }
 
 export interface ProductProps {
@@ -23,6 +12,8 @@ export interface ProductProps {
   max_people: number;
   qty: number;
   remark: string;
+  img_data?: string;
+  price: PriceProps[]; // この行を追加
 }
 
 export interface PriceProps {
@@ -32,6 +23,7 @@ export interface PriceProps {
   value: number;
   tax: number;
   remark: string;
+  stock: StockProps[]; // この行を追加
 }
 
 export interface SeatProps {
@@ -51,6 +43,7 @@ export interface StockProps {
   start_at: string;
   end_at: string;
   is_enable: boolean;
+  product_id: number; // ここに追加
 }
 
 export interface SeatReserveProps {
@@ -100,6 +93,7 @@ export interface OrderProps {
   is_pending: boolean;
   created_at: string;
   remark: string;
+  stock_id: number; // ここに追加
 }
 
 export interface CustomerProps {
@@ -110,6 +104,7 @@ export interface CustomerProps {
   password: string;
   address: string;
   payment_info: string;
+  order: OrderProps[]; // order プロパティを追加
 }
 
 export interface ManageApiResponse {
@@ -124,15 +119,15 @@ export interface GroupProps {
   name: string;
   start_before: number;
   invalid_duration: number;
-  product: ProductProps[];
+  unit_time: number;
+  max_time: number;
+  interval: number;
+  product: ProductProps[]; // ネストされたProductProps
 }
-
-
-
 
 export interface APIResponse {
   shop: ShopProps[];
-  product_group: ProductGroupProps[];
+  product_group: GroupProps[];
   product: ProductProps[];
   price: PriceProps[];
   seat: SeatProps[];

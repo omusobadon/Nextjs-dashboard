@@ -13,19 +13,24 @@ import React, { useState, useEffect } from "react";
 import GetAPI from "@/lib/api_get";
 import DeleteAPI from "@/lib/api_delete";
 //SubComponents
-import { CreateProduct } from "Rental/Product/SubComponents/createproduct.tsx";
-import { CreateGroup } from "Rental/Product/SubComponents/CreateGroup.tsx";
-import { DeleteGroups } from "Rental/Product/SubComponents/DeleteGroup.tsx";
-import { DeleteProduct } from "Rental/Product/SubComponents/DeleteProduct.tsx";
+import { CreateProduct } from "Rental/Product/SubComponents/createproduct";
+import { CreateGroup } from "Rental/Product/SubComponents/CreateGroup";
+import { DeleteGroups } from "Rental/Product/SubComponents/DeleteGroup";
+import { DeleteProduct } from "Rental/Product/SubComponents/DeleteProduct";
 import { CreatePrice } from "./SubComponents/CreatePrice";
 
-export default function ProductPage() {
-  const [groups, setProducts] = useState([]);
-  const [openGroups, setOpenGroups] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+import { GroupProps } from "@/lib/TableInterface";
 
-  const handleCheckboxChange = (productId, isChecked) => {
+export default function ProductPage() {
+  const [groups, setGroups] = useState<GroupProps[]>([]);
+  const [openGroups, setOpenGroups] = useState<{ [key: string]: boolean }>({});
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+  type HandleCheckboxChange = (productId: string, isChecked: boolean) => void;
+
+  const handleCheckboxChange: HandleCheckboxChange = (productId, isChecked) => {
     setSelectedProducts((prevSelectedProducts) => {
       if (isChecked) {
         return [...prevSelectedProducts, productId];
@@ -45,8 +50,9 @@ export default function ProductPage() {
         console.log("Manage Data:", manageData);
 
         if (manageData && manageData.groups) {
-          const allProducts = manageData.groups.flatMap((group) => group);
-          setProducts(allProducts);
+          const allGroups = manageData.groups;
+
+          setGroups(allGroups);
         }
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -56,12 +62,13 @@ export default function ProductPage() {
     fetchProducts();
   }, []);
 
-  const toggleGroup = (groupId) => {
+  const toggleGroup = (groupId: number) => {
     setOpenGroups((prevOpenGroups) => ({
       ...prevOpenGroups,
-      [groupId]: !prevOpenGroups[groupId],
+      [groupId]: !prevOpenGroups[groupId.toString()],
     }));
   };
+
   return (
     <div className="bg-white p-4 sm:p-6 ">
       <div className="flex flex-col sm:flex-row justify-between mb-4">
@@ -104,7 +111,7 @@ export default function ProductPage() {
       {groups.map((group) => (
         <div
           key={group.id}
-          className="flex flex-col w-full h-full rounded-lg overflow-hidden my-10  dark:bg-gray-800 shadow-lg"
+          className="flex flex-col w-full h-full rounded-lg overflow-hidden my-10 dark:bg-gray-800 shadow-lg"
         >
           <Button
             onClick={() => toggleGroup(group.id)}
@@ -135,7 +142,7 @@ export default function ProductPage() {
                   グループを編集
                 </Button>
                 <div className="delete-button">
-                  <DeleteGroups groups={group} />
+                  <DeleteGroups groups={[group]} />
                 </div>
               </div>
               <Table>
@@ -155,9 +162,14 @@ export default function ProductPage() {
                         <TableCell className="w-[50px]">
                           <input
                             type="checkbox"
-                            checked={selectedProducts.includes(product.id)}
+                            checked={selectedProducts.includes(
+                              product.id.toString()
+                            )}
                             onChange={(e) =>
-                              handleCheckboxChange(product.id, e.target.checked)
+                              handleCheckboxChange(
+                                product.id.toString(),
+                                e.target.checked
+                              )
                             }
                           />
                         </TableCell>
@@ -170,12 +182,6 @@ export default function ProductPage() {
                           {product.name}
                         </TableCell>
                         <TableCell>{product.qty}</TableCell>
-                        <TableCell>
-                          {Array.isArray(product.price) &&
-                          product.price.length > 0
-                            ? `${product.price[0].value}円`
-                            : "N/A"}
-                        </TableCell>
                       </TableRow>
                     ))}
                 </TableBody>

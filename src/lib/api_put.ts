@@ -2,7 +2,7 @@ import { BaseAPI } from "./BaseAPI";
 import { ShopProps, APIResponse } from "./TableInterface"; // 適切なパスを設定してください
 
 export default class PutAPI extends BaseAPI {
-  constructor(baseUrl = process.env.NEXT_PUBLIC_GOAPI_IP) {
+  constructor(baseUrl: string = process.env.NEXT_PUBLIC_GOAPI_IP || "") {
     super(baseUrl);
   }
 

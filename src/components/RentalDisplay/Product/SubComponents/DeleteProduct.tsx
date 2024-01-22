@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import DeleteAPI from "@/lib/api_delete";
 
-export function DeleteProduct({ selectedProducts }) {
+export function DeleteProduct({ selectedProducts }: { selectedProducts: string[] }) {
   const handleDelete = async () => {
     const deleteApi = new DeleteAPI();
     try {

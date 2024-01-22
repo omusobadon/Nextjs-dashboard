@@ -37,38 +37,38 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-import { Bar, Line } from "react-chartjs-2";
+//import { Bar, Line } from "react-chartjs-2";
 import React, { useRef } from "react";
-import { faker } from "@faker-js/faker";
-
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    
-  ],
-};
-
-export const data2 = {
-  labels,
-  datasets: [
-    {
-      type: "line", // 折れ線グラフのみを表示
-      label: "Dataset 2",
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      borderColor: "rgba(53, 162, 235, 0.8)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-      fill: true, // 線の下を塗りつぶす
-      tension: 0.4 
-    },
-  ]
-};
+//import { faker } from "@faker-js/faker";
+//
+//const labels = ["January", "February", "March", "April", "May", "June", "July"];
+//
+//export const data = {
+//  labels,
+//  datasets: [
+//    {
+//      label: "Dataset 1",
+//      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+//      backgroundColor: "rgba(255, 99, 132, 0.5)",
+//    },
+//    
+//  ],
+//};
+//
+//export const data2 = {
+//  labels,
+//  datasets: [
+//    {
+//      type: "line", // 折れ線グラフのみを表示
+//      label: "Dataset 2",
+//      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+//      borderColor: "rgba(53, 162, 235, 0.8)",
+//      backgroundColor: "rgba(53, 162, 235, 0.5)",
+//      fill: true, // 線の下を塗りつぶす
+//      tension: 0.4 
+//    },
+//  ]
+//};
 
 export default function Dashboard() {
   const ref = useRef(null);
@@ -83,7 +83,7 @@ export default function Dashboard() {
               <CalendarIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <Line data={data2} />
+              {/*<Line data={data2} />*/}
             </CardContent>
           </Card>
           <Card>
@@ -92,7 +92,7 @@ export default function Dashboard() {
               <CheckIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <Bar data={data} />
+              {/*<Bar data={data} />*/}
             </CardContent>
           </Card>
           <Card>
@@ -101,7 +101,7 @@ export default function Dashboard() {
               <UsersIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <Bar data={data} />
+             {/* <Bar data={data} />*/}
             </CardContent>
           </Card>
           <Card>
@@ -110,7 +110,7 @@ export default function Dashboard() {
               <PanelTopCloseIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </CardHeader>
             <CardContent>
-              <Bar data={data} />s
+              {/*<Bar data={data} />*/}
             </CardContent>
           </Card>
         </div>

@@ -3,9 +3,6 @@ export { default as ProductPage } from './Product/Product';
 export { default as StockPage } from './Product/Stock';
 //予約管理
 export { default as ReservationPage } from './Rental/ReservationPage';
-export { default as ReservationCarPage } from './Rental/ReservationCarPage';
-export { default as ReservationMoviePage } from './Rental/ReservationMoviePage';
-export { default as ReservationSeatPage } from './Rental/ReservationSeatPage';
 export { default as ResSchedule } from './Rental/ResSchedule';
 //売上管理
 export { default as EarningsPage } from './Earnings/Earnings';

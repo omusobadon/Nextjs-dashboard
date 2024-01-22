@@ -24,9 +24,13 @@ import {
 import React, { useState, useEffect } from "react";
 import GetAPI from "@/lib/api_get";
 import PutAPI from "@/lib/api_put";
-import { group } from "console";
+import { GroupProps } from "@/lib/TableInterface";
 
-export function CreatePrice({ groups }) {
+type CreateGroupProps = {
+  groups: GroupProps[]; // ここで正しい型を指定
+};
+
+export function CreatePrice({ groups }: CreateGroupProps) {
   const [formData, setFormData] = useState({
     name: "",
     value: "",
@@ -58,17 +62,17 @@ export function CreatePrice({ groups }) {
         </DialogHeader>
         <Select>
           <SelectTrigger>
-            <Label>商品名</Label>
-            {groups.map((group) => (
-              <SelectContent>
-                {group.product &&
-                  Array.isArray(group.product) &&
-                  group.product.map((product) => (
-                    <SelectItem value={product.id}>{product.name}</SelectItem>
-                  ))}
-              </SelectContent>
-            ))}
+            <SelectValue placeholder="商品を選択" />
           </SelectTrigger>
+          {groups.map((group) => (
+            <SelectContent>
+              {group.product &&
+                Array.isArray(group.product) &&
+                group.product.map((product) => (
+                  <SelectItem value={product.id.toString()}>{product.name}</SelectItem>
+                ))}
+            </SelectContent>
+          ))}
         </Select>
         <Label>料金名</Label>
         <Input type="text" name="name" placeholder="料金名" />

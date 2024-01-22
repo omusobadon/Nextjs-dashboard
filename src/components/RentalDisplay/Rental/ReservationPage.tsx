@@ -9,29 +9,47 @@ import {
 } from "@/components/ui/table";
 import GetAPI from "@/lib/api_get";
 import React, { useState, useEffect } from "react";
+import {
+  ManageApiResponse,
+  ProductProps,
+  StockProps,
+} from "@/lib/TableInterface";
 
 export default function ReservationPage() {
-  const [reservations, setReservations] = useState([]);
+  const [reservations, setReservations] = useState<
+    Array<{
+      id: number;
+      name: string;
+      startAt: string;
+      endAt: string;
+      product: string;
+      status: string;
+    }>
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const shopApi = new GetAPI();
       const selectedShopId = Number(localStorage.getItem("selectedShopId"));
-      const manageData = await shopApi.getManageData(selectedShopId);
+      const manageData: ManageApiResponse = await shopApi.getManageData(
+        selectedShopId
+      );
 
-      const allProducts = manageData.groups.reduce(
-        (acc, group) => acc.concat(group.product),
+      const allProducts: ProductProps[] = manageData.groups.reduce(
+        (acc: ProductProps[], group) => acc.concat(group.product),
         []
       );
-      console.log("All products:", allProducts); // デバッグ情報
+      console.log("All products:", allProducts);
 
-      const allStocks = allProducts.reduce((acc, product) => {
-        // ここで product が undefined でないことを確認
-        if (product && product.price && Array.isArray(product.price)) {
-          return acc.concat(product.price.flatMap((p) => p.stock));
-        }
-        return acc;
-      }, []);
+      const allStocks: StockProps[] = allProducts.reduce(
+        (acc: StockProps[], product) => {
+          if (product && product.price && Array.isArray(product.price)) {
+            return acc.concat(product.price.flatMap((p) => p.stock));
+          }
+          return acc;
+        },
+        []
+      );
 
       const formattedData = manageData.customers.reduce((acc, customer) => {
         if (customer.order && customer.order.length > 0) {
@@ -46,7 +64,7 @@ export default function ReservationPage() {
               stock,
               `商品: `,
               product
-            ); // デバッグ情報
+            );
 
             return {
               id: order.id,
@@ -60,7 +78,14 @@ export default function ReservationPage() {
           return acc.concat(customerOrders);
         }
         return acc;
-      }, []);
+      }, [] as {
+        id: number;
+        name: string;
+        startAt: string;
+        endAt: string;
+        product: string;
+        status: string;
+      }[]);
 
       setReservations(formattedData);
     };
