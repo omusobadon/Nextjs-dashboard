@@ -68,10 +68,8 @@ export function CreateProduct({ groups }) {
   const sendProductData = async (productData) => {
     const putApi = new PutAPI();
     try {
-      const response = await putApi.putProduct(productData);
-      window.location.reload();
-      console.log("Product added successfully", response);
-      // ここで成功時の処理を追加 (例: フォームをリセットする、通知を表示する等)
+      await putApi.putProduct(productData);
+      window.location.reload();      // ここで成功時の処理を追加 (例: フォームをリセットする、通知を表示する等)
     } catch (error) {
       console.error("Error in submitting form:", error);
       // ここでエラー時の処理を追加

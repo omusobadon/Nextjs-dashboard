@@ -17,6 +17,7 @@ import { CreateProduct } from "Rental/Product/SubComponents/createproduct.tsx";
 import { CreateGroup } from "Rental/Product/SubComponents/CreateGroup.tsx";
 import { DeleteGroups } from "Rental/Product/SubComponents/DeleteGroup.tsx";
 import { DeleteProduct } from "Rental/Product/SubComponents/DeleteProduct.tsx";
+import { CreatePrice } from "./SubComponents/CreatePrice";
 
 export default function ProductPage() {
   const [groups, setProducts] = useState([]);
@@ -82,6 +83,7 @@ export default function ProductPage() {
         <div className="flex gap-5">
           <CreateGroup groups={groups} />
           <CreateProduct groups={groups} />
+          <CreatePrice groups={groups} />
         </div>
       </div>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4">

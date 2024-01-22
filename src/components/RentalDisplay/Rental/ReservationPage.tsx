@@ -18,28 +18,42 @@ export default function ReservationPage() {
       const shopApi = new GetAPI();
       const selectedShopId = Number(localStorage.getItem("selectedShopId"));
       const manageData = await shopApi.getManageData(selectedShopId);
-  
-      const allProducts = manageData.groups.reduce((acc, group) => acc.concat(group.product), []);
+
+      const allProducts = manageData.groups.reduce(
+        (acc, group) => acc.concat(group.product),
+        []
+      );
       console.log("All products:", allProducts); // デバッグ情報
-  
+
       const allStocks = allProducts.reduce((acc, product) => {
-        return product.price && Array.isArray(product.price) ? acc.concat(product.price.flatMap(p => p.stock)) : acc;
+        // ここで product が undefined でないことを確認
+        if (product && product.price && Array.isArray(product.price)) {
+          return acc.concat(product.price.flatMap((p) => p.stock));
+        }
+        return acc;
       }, []);
-  
+
       const formattedData = manageData.customers.reduce((acc, customer) => {
         if (customer.order && customer.order.length > 0) {
-          const customerOrders = customer.order.map(order => {
-            const stock = allStocks.find(s => s.id === order.stock_id);
-            const product = stock ? allProducts.find(p => p.id === stock.product_id) : null;
-  
-            console.log(`注文ID: ${order.id}, 在庫ID: ${order.stock_id}, 在庫: `, stock, `商品: `, product); // デバッグ情報
-  
+          const customerOrders = customer.order.map((order) => {
+            const stock = allStocks.find((s) => s.id === order.stock_id);
+            const product = stock
+              ? allProducts.find((p) => p.id === stock.product_id)
+              : null;
+
+            console.log(
+              `注文ID: ${order.id}, 在庫ID: ${order.stock_id}, 在庫: `,
+              stock,
+              `商品: `,
+              product
+            ); // デバッグ情報
+
             return {
               id: order.id,
               name: customer.name,
               startAt: order.start_at,
               endAt: order.end_at,
-              product: product ? product.name : '不明な商品',
+              product: product ? product.name : "不明な商品",
               status: order.is_accepted ? "Active" : "Pending",
             };
           });
@@ -47,15 +61,12 @@ export default function ReservationPage() {
         }
         return acc;
       }, []);
-  
+
       setReservations(formattedData);
     };
-  
+
     fetchData();
   }, []);
-  
-
-  // ...
 
   return (
     <div>
