@@ -17,6 +17,7 @@ export function DeleteProduct({ selectedProducts }: { selectedProducts: string[]
       for (const productId of selectedProducts) {
         await deleteApi.deleteProduct(productId);
       }
+      window.location.reload();
       console.log("Selected products deleted successfully");
       // 成功後の処理（例: 状態の更新や通知の表示など）
     } catch (error) {

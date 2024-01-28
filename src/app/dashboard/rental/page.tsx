@@ -9,7 +9,7 @@ import {
   StockPage,
   //予約管理
   ReservationPage,
-  ResSchedule,
+  ReservationSeatPage,
   //売上管理
   EarningsPage,
   //Not Foundページ
@@ -25,7 +25,7 @@ const CONTENT_COMPONENTS: { [key: string]: React.ComponentType } = {
   StockPage: StockPage,
   //予約管理
   ReservationPage: ReservationPage,
-  ResSchedule: ResSchedule,
+  ReservationSeatPage: ReservationSeatPage,
   //売上管理
   EarningPage: EarningsPage,
   //Not Foundページ
@@ -119,7 +119,7 @@ export default function Rental() {
           <LeftSidebar
             contentName={[
               "ReservationPage",
-              "ResSchedule",
+              "ReservationSeatPage",
               "CancelPage",
               "CleaningPage",
             ]}
@@ -129,8 +129,8 @@ export default function Rental() {
             <SideLink name="ReservationPage" sidebarHelpers={sidebarHelpers}>
               予約
             </SideLink>
-            <SideLink name="ResSchedule" sidebarHelpers={sidebarHelpers}>
-              予約表
+            <SideLink name="ReservationSeatPage" sidebarHelpers={sidebarHelpers}>
+              座席予約表
             </SideLink>
             <SideLink name="CancelPage" sidebarHelpers={sidebarHelpers}>
               キャンセル

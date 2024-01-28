@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,20 +13,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-  Select,
-} from "@/components/ui/select";
-import React, { useState } from "react";
 import PutAPI from "@/lib/api_put"; // 適切なパスを設定してください
-import Image from "next/image";
 import { GroupProps } from "@/lib/TableInterface";
 
 type CreateGroupProps = {
-  groups: GroupProps[]; // ここで正しい型を指定
+  groups: GroupProps[];
 };
 
 interface ProductData {
@@ -33,7 +26,16 @@ interface ProductData {
   max_people: number | "";
   qty: number | "";
   remark: string;
-  img_data: string | null;
+  img_data: string | File | null;
+}
+
+interface ProductDataForSubmit {
+  group_id: number | "";
+  name: string;
+  max_people: number | "";
+  qty: number | "";
+  remark: string;
+  img_data: string | null; // Base64 文字列かnull
 }
 
 export function CreateProduct({ groups }: CreateGroupProps) {
@@ -47,60 +49,77 @@ export function CreateProduct({ groups }: CreateGroupProps) {
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     let formattedValue: number | string = value;
 
-    // group_id, max_people, qty を数値として扱う
     if (["group_id", "max_people", "qty"].includes(name)) {
       formattedValue = value === "" ? "" : parseInt(value, 10);
     }
 
-    setFormData({ ...formData, [name]: formattedValue });
+    // img_data はこの関数で扱わない
+    if (name !== "img_data") {
+      setFormData({ ...formData, [name]: formattedValue });
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith("image/")) {
+        setImagePreview(URL.createObjectURL(file));
+        setFormData({ ...formData, img_data: file }); // Fileオブジェクトをセット
+      } else {
+        setImagePreview(null);
+        setFormData({ ...formData, img_data: null });
+      }
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // imgData があれば Base64 に変換、なければそのまま送信
-    if (formData.img_data) {
+    if (formData.img_data && formData.img_data instanceof Blob) {
       const reader = new FileReader();
-      reader.readAsDataURL(formData.img_data as unknown as Blob);
+      reader.readAsDataURL(formData.img_data);
       reader.onloadend = async () => {
         if (reader.result && typeof reader.result === "string") {
           const base64data = reader.result.split(",")[1];
-          const productData: ProductData = {
+          const productDataForSubmit: ProductDataForSubmit = {
             ...formData,
-            group_id: formData.group_id !== "" ? formData.group_id : "", // 直接 string として代入
-            img_data: base64data,
+            group_id: formData.group_id !== "" ? formData.group_id : "",
+            img_data: base64data, // ここでBase64 文字列を割り当てる
           };
 
-          sendProductData(productData);
+          sendProductData(productDataForSubmit);
         } else {
           console.error("Failed to load image");
-          // Handle the error appropriately
         }
       };
     } else {
-      const productData: ProductData = {
+      const productDataForSubmit: ProductDataForSubmit = {
         ...formData,
-        group_id: formData.group_id !== "" ? formData.group_id : "", // 直接 string として代入
+        group_id: formData.group_id !== "" ? formData.group_id : "",
         img_data: null,
       };
 
-      sendProductData(productData);
+      sendProductData(productDataForSubmit);
     }
   };
 
-  // 商品データを送信する関数
-  const sendProductData = async (productData: ProductData) => {
+  const sendProductData = async (productData: ProductDataForSubmit) => {
     const putApi = new PutAPI();
     try {
       await putApi.putProduct(productData);
-      window.location.reload(); // ここで成功時の処理を追加 (例: フォームをリセットする、通知を表示する等)
+      window.location.reload();
     } catch (error) {
       console.error("Error in submitting form:", error);
-      // ここでエラー時の処理を追加
     }
   };
 
@@ -114,31 +133,6 @@ export function CreateProduct({ groups }: CreateGroupProps) {
       img_data: null,
     });
     setImagePreview(null);
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      if (file.type.startsWith("image/")) {
-        setImagePreview(URL.createObjectURL(file));
-
-        // ファイルをBase64エンコードした文字列に変換
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-          if (reader.result && typeof reader.result === "string") {
-            setFormData({ ...formData, img_data: reader.result });
-          } else {
-            console.error("Failed to load image");
-            // エラーハンドリング
-          }
-        };
-      } else {
-        setImagePreview(null);
-        setFormData({ ...formData, img_data: null });
-      }
-    }
   };
 
   return (
@@ -220,7 +214,9 @@ export function CreateProduct({ groups }: CreateGroupProps) {
               name="remark"
               value={formData.remark}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                handleInputChange(e as unknown as React.ChangeEvent<HTMLInputElement>)
+                handleInputChange(
+                  e as unknown as React.ChangeEvent<HTMLInputElement>
+                )
               }
             />
           </div>
@@ -235,7 +231,13 @@ export function CreateProduct({ groups }: CreateGroupProps) {
             {imagePreview && (
               <div className="ml-4">
                 <Label className="font-bold text-lg">商品画像 プレビュー</Label>
-                <Image src={imagePreview} alt="Preview" className="max-w-xs" />
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  width={500} // 例として500pxを設定
+                  height={300} // 例として300pxを設定
+                  className="max-w-xs"
+                />
               </div>
             )}
           </div>
